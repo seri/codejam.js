@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cheating a Boolean Tree</title>
+	<style type="text/css">
+	#input { float: left;  }
+	#submit { float: left; }
+	#output { float: left; }
+	</style>
+	<script type="text/javascript">
+	// Dynamic Programming formula:
+	// dp[x][v] = minium gate changes needed for node x to have value v
+
+	function new2DArray(h, w, value) {
+		var a = new Array(h);
+		for (var y = 0; y < h; y++) {
+			a[y] = new Array(w);
+			for (var x = 0; x < w; x++) {
+				a[y][x] = value;
+			}
+		}
+		return a;
+	}
+
+	function andor(x, y, op) {
+		return op ? (x && y) : (x || y);
+	}
+
+	function Node(value, gate, mutable) {
+		this.value = value;
+		this.gate = gate;
+		this.mutable = mutable;
+	}
+
+	function solve(M, V, tree) {
+		var dp = new new2DArray(M + 1, 2, M);
+		var mid = (M - 1)/2;
+		for (var x = mid + 1; x <= M; x++) {
+			dp[x][tree[x].value] = 0;
+		}
+		for (x = mid; x >= 1; x--) {
+			var gate = tree[x].gate, mutable = tree[x].mutable;
+			var l = 2 * x, r = l + 1;
+			for (var lv = 0; lv <= 1; lv++) {
+				for (var rv = 0; rv <= 1; rv++) {
+					v = andor(lv, rv, gate);
+					var cost = dp[l][lv] + dp[r][rv];
+					dp[x][v] = Math.min(dp[x][v], cost);
+					if (mutable) {
+						v = andor(lv, rv, !gate);
+						dp[x][v] = Math.min(dp[x][v], 1 + cost);
+					}
+				}
+			}
+		}
+		return dp[1][V] < M ? dp[1][V] : -1;
+	}
+
+	function Problem() {
+		this.M = 0;
+		this.V = 0;
+		this.tree = []; // index starting from 1 for easy manipulation
+	}
+
+	function parse(input) {
+		var probs = [];
+		var lines = input.split(/\n/);
+		var nCase = parseInt(lines[0]);
+		for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
+			var prob = new Problem();
+
+			var a = lines[i++].split(" ");
+			prob.M = parseInt(a[0]);
+			prob.V = parseInt(a[1]);
+
+			prob.tree = new Array(prob.M + 1);
+
+			for (var j = 1; j <= (prob.M - 1)/2; j++) {
+				a = lines[i++].split(" ");
+				var gate = parseInt(a[0]);
+				var mutable = parseInt(a[1]);
+				prob.tree[j] = new Node(0, gate, mutable); 
+			}
+
+			for (j = (prob.M - 1)/2 + 1; j <= prob.M; j++) {
+				prob.tree[j] = new Node(parseInt(lines[i++]), 0, 0);
+			}
+			
+			probs.push(prob);
+		}
+		return probs;
+	}
+
+	function process(probs) {
+		var output = "";
+		for (var i = 0; i < probs.length; i++) {
+			output += "Case #" + (i + 1).toString() + ": ";
+			var x = solve(probs[i].M, probs[i].V, probs[i].tree);
+			if (x == -1) {
+				output += "IMPOSSIBLE";
+			} else {
+				output += x.toString();
+			}
+			output += "\n";
+		}
+		return output;
+	}
+
+	function main() {
+		var input = document.getElementById("input");
+		var output = document.getElementById("output");
+		output.value = process(parse(input.value));
+	}
+	</script>
+</head>
+<body>
+	<h3>Cheating a Boolean Tree</h3>
+	<em>Google Code Jam Round 2 2008 A: </em>
+	<a href="https://code.google.com/codejam/contest/32001/dashboard#s=p0">Problem Statement</a>
+	<p>The left textarea is prefilled with small input.</p>
+	<textarea id="input" type="text" cols="50" rows="20" >
+20
+19 0
+0 0
+0 0
+0 0
+0 0
+0 0
+1 1
+1 0
+0 1
+0 1
+0
+0
+0
+0
+0
+0
+0
+1
+0
+1
+23 1
+1 0
+1 0
+1 1
+1 1
+1 0
+0 1
+1 1
+1 1
+1 1
+1 1
+1 1
+0
+0
+1
+0
+0
+0
+1
+0
+1
+0
+0
+1
+19 0
+0 0
+0 0
+0 0
+0 0
+0 0
+1 0
+0 0
+0 0
+0 0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+17 0
+1 1
+1 0
+0 1
+1 1
+1 0
+0 1
+0 1
+1 0
+1
+1
+1
+0
+1
+1
+0
+1
+1
+7 1
+0 1
+1 1
+1 1
+0
+1
+0
+1
+9 0
+0 1
+0 0
+0 0
+1 0
+0
+1
+0
+1
+1
+15 0
+0 0
+0 0
+1 0
+0 1
+0 1
+1 0
+0 0
+0
+1
+1
+0
+1
+1
+0
+0
+29 0
+1 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 1
+0 1
+0 1
+0 1
+0 1
+0 1
+0 1
+0 1
+1
+1
+0
+1
+0
+0
+1
+1
+0
+1
+0
+0
+1
+1
+0
+29 1
+0 1
+1 1
+1 0
+1 0
+1 0
+1 0
+1 0
+1 1
+1 1
+1 1
+1 1
+1 1
+1 1
+1 1
+1
+1
+0
+0
+1
+1
+0
+1
+0
+0
+1
+0
+1
+1
+0
+3 0
+1 1
+0
+1
+27 0
+1 0
+0 0
+0 1
+0 0
+0 0
+0 0
+0 1
+0 1
+0 1
+0 1
+0 1
+0 1
+1 0
+1
+0
+0
+1
+0
+1
+1
+0
+1
+0
+1
+0
+0
+0
+11 1
+0 1
+1 0
+1 1
+1 0
+1 1
+0
+1
+1
+1
+1
+0
+5 1
+0 0
+0 1
+0
+0
+0
+5 0
+1 1
+0 1
+1
+1
+1
+27 1
+1 0
+1 0
+1 1
+1 1
+1 0
+1 0
+0 1
+1 1
+0 0
+1 1
+1 1
+1 1
+1 1
+0
+0
+0
+1
+0
+0
+1
+0
+1
+0
+0
+1
+1
+0
+17 0
+0 0
+0 0
+1 0
+0 1
+0 1
+0 1
+0 1
+0 1
+1
+0
+1
+1
+0
+1
+0
+1
+0
+29 1
+1 0
+1 1
+1 0
+1 1
+1 1
+1 0
+1 1
+1 1
+1 1
+0 1
+1 1
+1 1
+1 1
+1 1
+0
+1
+0
+0
+1
+0
+0
+0
+1
+1
+0
+0
+1
+0
+1
+29 0
+0 0
+0 0
+1 1
+0 0
+1 0
+0 1
+0 0
+0 1
+0 1
+0 1
+0 1
+0 1
+0 1
+1 0
+0
+1
+0
+1
+0
+1
+0
+1
+0
+0
+1
+0
+1
+0
+0
+23 1
+0 0
+0 1
+1 0
+0 1
+0 1
+0 1
+0 0
+0 1
+1 0
+0 1
+0 1
+0
+0
+0
+1
+0
+0
+1
+0
+0
+0
+0
+0
+5 0
+1 0
+1 1
+1
+1
+1
+	</textarea>
+	<button id="submit" onclick="main()">Run</button>
+	<textarea id="output" type="text" cols="50" rows="20" >
+Output will be displayed here
+	</textarea>
+</body>
+</html>

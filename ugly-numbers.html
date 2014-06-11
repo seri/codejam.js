@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ugly Numbers</title>
+	<style type="text/css">
+	#input { float: left;  }
+	#submit { float: left; }
+	#output { float: left; }
+	</style>
+	<script type="text/javascript">
+	// Dynamic Programming formula:
+	// dp[n][m] = ways to get to m (mod 210) using only the first n digits
+
+	var M = 210; // 2 * 3 * 5 * 7 
+
+	function new2DArray(h, w, value) {
+		var a = new Array(h);
+		for (var y = 0; y < h; y++) {
+			a[y] = new Array(w);
+			for (var x = 0; x < w; x++) {
+				a[y][x] = value;
+			}
+		}
+		return a;
+	}
+
+	function toDigits(str) {
+		var digits = new Array(str.length);
+		for (var i = 0; i < str.length; i++) {
+			digits[i] = str.charCodeAt(i) - 48; // 48 = '0'
+		}
+		return digits;
+	}
+
+	function tryExtending(digits, dp, n, signs) {
+		// Invariants:
+		// 1) There is a sign between digit (n - 1) and digit n.
+		// 2) We have completely solved for the first n digits.
+		// We now try adding more digits as far as we can,.
+		var N = digits.length;
+		for (var newN = n + 1, cur = 0; newN <= N; newN++) {
+			cur = (10 * cur + digits[newN - 1]) % M;
+			for (var m = 0; m < M; m++) {
+				signs.forEach(function(sign) {
+					var newM = (m + sign * cur + M) % M;
+					dp[newN][newM] += dp[n][m];
+				});
+			}
+		}
+	}
+
+	function solve(prob) {
+		var digits = toDigits(prob);
+		var N = digits.length;
+		var dp = new2DArray(N + 1, M, 0);
+
+		dp[0][0] = 1;
+		tryExtending(digits, dp, 0, [1]);
+		for (var n = 1; n < N; n++) {
+			tryExtending(digits, dp, n, [1, -1]);
+		}
+
+		var res = 0;
+		for (var m = 0; m < M; m++) {
+			if (m % 2 == 0 || m % 3 == 0 || m % 5 == 0 || m % 7 == 0) {
+				res += dp[N][m];
+			}
+		}
+		return res;
+	}
+
+	function parse(input) {
+		var probs = [];
+		var lines = input.split(/\n/);
+		var N = parseInt(lines[0]);
+		for (var i = 0; i < N; i++) {
+			probs.push(lines[i + 1]);
+		}
+		return probs;
+	}
+
+	function process(probs) {
+		var output = "";
+		for (var i = 0; i < probs.length; i++) {
+			output += "Case #" + (i + 1).toString() + ": ";
+			output += solve(probs[i]).toString() + "\n";
+		}
+		return output;
+	}
+
+	function main() {
+		var input = document.getElementById("input");
+		var output = document.getElementById("output");
+		output.value = process(parse(input.value));
+	}
+	</script>	
+</head>
+<body>
+	<h3>Ugly Numbers</h3>
+	<em>Google Code Jam Round 1C 2008 B: </em>
+	<a href="https://code.google.com/codejam/contest/32015/dashboard#s=p1&a=1">Problem Statement</a>
+	<p>The left textarea is prefilled with small input.</p>
+	<textarea id="input" type="text" cols="50" rows="20" >
+100
+0
+1
+9
+13
+011
+277
+413
+0876
+7192
+7329
+8126
+9893
+12345
+17214
+20204
+160176
+1566843
+9716463
+54275347
+84091195
+91920744
+216589640
+845048810
+3747766429
+4802642960
+8224853717
+9712606483
+19982103842
+830497247155
+900059026267
+926804404288
+0000000000277
+0000000007329
+0000000017214
+0000000160176
+0000009716463
+0000091920744
+0000555005000
+0000845048810
+0004288666440
+0008224853717
+0019982103842
+0066006333660
+0266408208048
+0500550055050
+0550050000505
+0555000555550
+0555550500505
+0603063033330
+0800428008208
+0801564185288
+0926804404288
+1087830939945
+1111111111111
+1583319926819
+1854109578624
+2208684408826
+2282622822428
+3006306630360
+3076293173315
+3139233861342
+3363600606666
+3719669768636
+3824130392011
+4746598597199
+4787157013058
+4804248428846
+4859618176134
+4938069459189
+5005000000050
+5050500005000
+5149017057386
+5547883568237
+5550055055005
+5550055550005
+5555000555050
+6066446228844
+6204689097259
+6336663000030
+6360660306000
+6363633000033
+6600066606363
+6603063333033
+6603330660006
+6899770633780
+7384787452228
+7777777777777
+8006422004864
+8085122681688
+8148388648124
+8497502656195
+8604680006424
+8617183596076
+8668828424088
+8855851047012
+8968834961434
+9321829612918
+9433879877471
+9655492462320
+9929263750831
+	</textarea>
+	<button id="submit" onclick="main()">Run</button>
+	<textarea id="output" type="text" cols="50" rows="20" >
+Output will be displayed here
+	</textarea>
+</body>
+</html>

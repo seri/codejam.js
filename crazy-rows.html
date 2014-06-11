@@ -1,105 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Crazy Rows</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function Problem() {
-		this.N = 0;
-		this.matrix = [];
-	}
+    <title>Crazy Rows</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function Problem() {
+        this.N = 0;
+        this.matrix = [];
+    }
 
-	// Phase 1: a[i] is the position of the last '1' of row i in the matrix
-	function getLastOne(prob) {
-		var a = new Array(prob.N);
-		for (var i = 0; i < prob.N; i++) {
-			a[i] = -1;
-			for (var j = prob.N - 1; j >= 0 && a[i] == -1; j--) {
-				if (prob.matrix[i][j] == "1") {
-					a[i] = j;
-				}
-			}
-		}
-		return a;
-	}
+    // Phase 1: a[i] is the position of the last '1' of row i in the matrix
+    function getLastOne(prob) {
+        var a = new Array(prob.N);
+        for (var i = 0; i < prob.N; i++) {
+            a[i] = -1;
+            for (var j = prob.N - 1; j >= 0 && a[i] == -1; j--) {
+                if (prob.matrix[i][j] == "1") {
+                    a[i] = j;
+                }
+            }
+        }
+        return a;
+    }
 
-	// Phase 2: b[j] = i means that the final place for row j is i
-	function findFinal(a) {
-		var b = new Array(a.length);
-		for (var i = 0; i < b.length; i++) {
-			b[i] = -1;
-		}
-		for (i = 0; i < b.length; i++) {
-			for (var j = 0; j < a.length; j++) {
-				if (a[j] <= i && b[j] == -1) {
-					b[j] = i;
-					break;
-				}
-			}
-		}
-		return b;
-	}
+    // Phase 2: b[j] = i means that the final place for row j is i
+    function findFinal(a) {
+        var b = new Array(a.length);
+        for (var i = 0; i < b.length; i++) {
+            b[i] = -1;
+        }
+        for (i = 0; i < b.length; i++) {
+            for (var j = 0; j < a.length; j++) {
+                if (a[j] <= i && b[j] == -1) {
+                    b[j] = i;
+                    break;
+                }
+            }
+        }
+        return b;
+    }
 
-	// Finally count the number of swaps needed to sort a permutation of 0..(N - 1)
-	function swapSort(b) {
-		var res = 0;
-		for (var i = 0; i < b.length; i++) {
-			for (var j = i + 1; j < b.length; j++) {
-				if (b[i] > b[j]) {
-					res++;
-				}
-			}
-		}
-		return res;
-	}
+    // Finally count the number of swaps needed to sort a permutation of 0..(N - 1)
+    function swapSort(b) {
+        var res = 0;
+        for (var i = 0; i < b.length; i++) {
+            for (var j = i + 1; j < b.length; j++) {
+                if (b[i] > b[j]) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
 
-	function solve(prob) {
-		return swapSort(findFinal(getLastOne(prob)));
-	}
+    function solve(prob) {
+        return swapSort(findFinal(getLastOne(prob)));
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var T = parseInt(lines[0]);
-		for (var iCase = 0, iLine = 1; iCase < T; iCase++) {
-			var prob = new Problem();
-			prob.N = parseInt(lines[iLine++]);
-			prob.matrix = new Array(prob.N);
-			for (var i = 0; i < prob.N; i++) {
-				prob.matrix[i] = lines[iLine++];
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var T = parseInt(lines[0]);
+        for (var iCase = 0, iLine = 1; iCase < T; iCase++) {
+            var prob = new Problem();
+            prob.N = parseInt(lines[iLine++]);
+            prob.matrix = new Array(prob.N);
+            for (var i = 0; i < prob.N; i++) {
+                prob.matrix[i] = lines[iLine++];
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			output += solve(probs[i]).toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i]).toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>
 </head>
 <body>
-	<h3>Crazy Rows</h3>
-	<em>Google Code Jam Round 2 2009 A: </em>
-	<a href="https://code.google.com/codejam/contest/204113/dashboard#s=p0">Problem Statement</a> | 
-	<a href="https://code.google.com/codejam/contest/204113/dashboard#s=a&a=0">Solution</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Crazy Rows</h3>
+    <em>Google Code Jam Round 2 2009 A: </em>
+    <a href="https://code.google.com/codejam/contest/204113/dashboard#s=p0">Problem Statement</a> | 
+    <a href="https://code.google.com/codejam/contest/204113/dashboard#s=a&a=0">Solution</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 60
 2
 10
@@ -555,10 +555,10 @@
 10000000
 00001000
 01000000
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

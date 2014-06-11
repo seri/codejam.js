@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Saving the Universe</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function solve(engines, queries) {
-		var res = 0;
-		var seen = {};
-		var S = engines.length, Q = queries.length;
-		for (var i = 0, j = 0; i < Q; i++) {
-			var query = queries[i];
-			if (!(query in seen)) {
-				if (j == S - 1) {
-					seen = {};
-					j = 0;
-					res++;
-				}
-				seen[query] = true;
-				j++;
-			}
-		}
-		return res;
-	}
+    <title>Saving the Universe</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function solve(engines, queries) {
+        var res = 0;
+        var seen = {};
+        var S = engines.length, Q = queries.length;
+        for (var i = 0, j = 0; i < Q; i++) {
+            var query = queries[i];
+            if (!(query in seen)) {
+                if (j == S - 1) {
+                    seen = {};
+                    j = 0;
+                    res++;
+                }
+                seen[query] = true;
+                j++;
+            }
+        }
+        return res;
+    }
 
-	function Problem() {
-		this.engines = [];
-		this.queries = [];
-	}
+    function Problem() {
+        this.engines = [];
+        this.queries = [];
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var nCase = parseInt(lines[0]);
-		for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
-			var prob = new Problem();
-			var S = parseInt(lines[i++]);
-			for (var j = 0; j < S; j++) {
-				prob.engines.push(lines[i++]);
-			}
-			var Q = parseInt(lines[i++]); 
-			for (j = 0; j < Q; j++) {
-				prob.queries.push(lines[i++]);
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var nCase = parseInt(lines[0]);
+        for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
+            var prob = new Problem();
+            var S = parseInt(lines[i++]);
+            for (var j = 0; j < S; j++) {
+                prob.engines.push(lines[i++]);
+            }
+            var Q = parseInt(lines[i++]); 
+            for (j = 0; j < Q; j++) {
+                prob.queries.push(lines[i++]);
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			output += solve(probs[i].engines, probs[i].queries).toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i].engines, probs[i].queries).toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>Saving the Universe</h3>
-	<em>Google Code Jam Qualification Round 2008 A: </em>
-	<a href="https://code.google.com/codejam/contest/32013/dashboard">Problem Statement</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Saving the Universe</h3>
+    <em>Google Code Jam Qualification Round 2008 A: </em>
+    <a href="https://code.google.com/codejam/contest/32013/dashboard">Problem Statement</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 20
 2
 Googol USA
@@ -1416,10 +1416,10 @@ Googol Canada
 Googol Canada
 Googol Montserrat
 Alta View
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

@@ -1,100 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Card Game</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	var MOD = 1000000007;
+    <title>Card Game</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    var MOD = 1000000007;
 
-	function modPow(x, n, p) {
-		res = 1;
-		while (n > 0) {
-			if (n % 2 != 0) {
-				res = (res * x) % p;
-			}
-			x = (x * x) % p;
-			n = Math.floor(n / 2);
-		}
-		return res;
-	}
+    function modPow(x, n, p) {
+        res = 1;
+        while (n > 0) {
+            if (n % 2 != 0) {
+                res = (res * x) % p;
+            }
+            x = (x * x) % p;
+            n = Math.floor(n / 2);
+        }
+        return res;
+    }
 
-	function modInverse(x, p) {
-		return modPow(2, 65, 67);
-	}
+    function modInverse(x, p) {
+        return modPow(2, 65, 67);
+    }
 
-	function modBinomial(n, k, p) {
-		var numerator = 1;
-		for (var i = n; i > n - k; i--) {
-			numerator = (numerator * i) % p;
-		}
-		var denominator = 1;
-		for (i = 1; i <= k; i++) {
-			denominator = (denominator * i) % p;
-		}
-		return (numerator * modInverse(denominator, p)) % p;
-	}
+    function modBinomial(n, k, p) {
+        var numerator = 1;
+        for (var i = n; i > n - k; i--) {
+            numerator = (numerator * i) % p;
+        }
+        var denominator = 1;
+        for (i = 1; i <= k; i++) {
+            denominator = (denominator * i) % p;
+        }
+        return (numerator * modInverse(denominator, p)) % p;
+    }
 
-	function Problem() {
-		this.N = 0;
-		this.K = 0;
-		this.a = [];
-	}
+    function Problem() {
+        this.N = 0;
+        this.K = 0;
+        this.a = [];
+    }
 
-	function solve(prob) {
-		prob.a.sort();
-		var i, res = 0;
-		for (i = prob.K - 1; i < prob.N; i++) {
+    function solve(prob) {
+        prob.a.sort();
+        var i, res = 0;
+        for (i = prob.K - 1; i < prob.N; i++) {
 
-			res += (prob.a[i] * modBinomial(i, prob.K - 1, MOD)) % MOD;
-			res %= MOD;
-		} 
-		return res;
-	}
+            res += (prob.a[i] * modBinomial(i, prob.K - 1, MOD)) % MOD;
+            res %= MOD;
+        } 
+        return res;
+    }
 
-	function parse(str) {
-		var arr = str.split(/\s/);
-		var M = parseInt(arr[0]), m = 1;
-		var i, j, prob, probs = [];
-		for (i = 0; i < M; i++) {
-			prob = new Problem();
-			prob.N = parseInt(arr[m++]); 
-			prob.K = parseInt(arr[m++]); 
-			for (j = 0; j < prob.N; j++) {
-				prob.a.push(arr[m++]);
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(str) {
+        var arr = str.split(/\s/);
+        var M = parseInt(arr[0]), m = 1;
+        var i, j, prob, probs = [];
+        for (i = 0; i < M; i++) {
+            prob = new Problem();
+            prob.N = parseInt(arr[m++]); 
+            prob.K = parseInt(arr[m++]); 
+            for (j = 0; j < prob.N; j++) {
+                prob.a.push(arr[m++]);
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var str = "", i;
-		for (i = 0; i < probs.length; i++) {
-			str += "Case #" + (i + 1).toString() + ": ";
-			str += solve(probs[i]).toString() + "\n";
-		}
-		return str;
-	}
+    function process(probs) {
+        var str = "", i;
+        for (i = 0; i < probs.length; i++) {
+            str += "Case #" + (i + 1).toString() + ": ";
+            str += solve(probs[i]).toString() + "\n";
+        }
+        return str;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
 
-	console.log(12 * modPow(2, MOD - 2, MOD) % MOD);
-	</script>
+    console.log(12 * modPow(2, MOD - 2, MOD) % MOD);
+    </script>
 </head>
 <body>
-	<h3>Card Game</h3>
-	<em>Facebook Hacker Cup 2013, Round 1, Problem 1: </em>
-	<a href="http://programmingpraxis.com/2013/02/15/facebook-hacker-cup-2013-round-1-problem-1/">Problem Statement</a>
-	<p>The current solution won't work as Javascript doesn't support 64-bit integers.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Card Game</h3>
+    <em>Facebook Hacker Cup 2013, Round 1, Problem 1: </em>
+    <a href="http://programmingpraxis.com/2013/02/15/facebook-hacker-cup-2013-round-1-problem-1/">Problem Statement</a>
+    <p>The current solution won't work as Javascript doesn't support 64-bit integers.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 5
 4 3
 3 6 2 8
@@ -106,9 +106,9 @@
 1069 1122
 10 5
 10386 10257 10432 10087 10381 10035 10167 10206 10347 10088
-	</textarea>
-	<button id="submit" onclick="main()" disabled>Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
-	</textarea>
+    </textarea>
+    <button id="submit" onclick="main()" disabled>Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
 </body>
 </html>

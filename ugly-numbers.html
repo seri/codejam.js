@@ -1,106 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Ugly Numbers</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	// Dynamic Programming formula:
-	// dp[n][m] = ways to get to m (mod 210) using only the first n digits
+    <title>Ugly Numbers</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    // Dynamic Programming formula:
+    // dp[n][m] = ways to get to m (mod 210) using only the first n digits
 
-	var M = 210; // 2 * 3 * 5 * 7 
+    var M = 210; // 2 * 3 * 5 * 7 
 
-	function new2DArray(h, w, value) {
-		var a = new Array(h);
-		for (var y = 0; y < h; y++) {
-			a[y] = new Array(w);
-			for (var x = 0; x < w; x++) {
-				a[y][x] = value;
-			}
-		}
-		return a;
-	}
+    function new2DArray(h, w, value) {
+        var a = new Array(h);
+        for (var y = 0; y < h; y++) {
+            a[y] = new Array(w);
+            for (var x = 0; x < w; x++) {
+                a[y][x] = value;
+            }
+        }
+        return a;
+    }
 
-	function toDigits(str) {
-		var digits = new Array(str.length);
-		for (var i = 0; i < str.length; i++) {
-			digits[i] = str.charCodeAt(i) - 48; // 48 = '0'
-		}
-		return digits;
-	}
+    function toDigits(str) {
+        var digits = new Array(str.length);
+        for (var i = 0; i < str.length; i++) {
+            digits[i] = str.charCodeAt(i) - 48; // 48 = '0'
+        }
+        return digits;
+    }
 
-	function tryExtending(digits, dp, n, signs) {
-		// Invariants:
-		// 1) There is a sign between digit (n - 1) and digit n.
-		// 2) We have completely solved for the first n digits.
-		// We now try adding more digits as far as we can,.
-		var N = digits.length;
-		for (var newN = n + 1, cur = 0; newN <= N; newN++) {
-			cur = (10 * cur + digits[newN - 1]) % M;
-			for (var m = 0; m < M; m++) {
-				signs.forEach(function(sign) {
-					var newM = (m + sign * cur + M) % M;
-					dp[newN][newM] += dp[n][m];
-				});
-			}
-		}
-	}
+    function tryExtending(digits, dp, n, signs) {
+        // Invariants:
+        // 1) There is a sign between digit (n - 1) and digit n.
+        // 2) We have completely solved for the first n digits.
+        // We now try adding more digits as far as we can,.
+        var N = digits.length;
+        for (var newN = n + 1, cur = 0; newN <= N; newN++) {
+            cur = (10 * cur + digits[newN - 1]) % M;
+            for (var m = 0; m < M; m++) {
+                signs.forEach(function(sign) {
+                    var newM = (m + sign * cur + M) % M;
+                    dp[newN][newM] += dp[n][m];
+                });
+            }
+        }
+    }
 
-	function solve(prob) {
-		var digits = toDigits(prob);
-		var N = digits.length;
-		var dp = new2DArray(N + 1, M, 0);
+    function solve(prob) {
+        var digits = toDigits(prob);
+        var N = digits.length;
+        var dp = new2DArray(N + 1, M, 0);
 
-		dp[0][0] = 1;
-		tryExtending(digits, dp, 0, [1]);
-		for (var n = 1; n < N; n++) {
-			tryExtending(digits, dp, n, [1, -1]);
-		}
+        dp[0][0] = 1;
+        tryExtending(digits, dp, 0, [1]);
+        for (var n = 1; n < N; n++) {
+            tryExtending(digits, dp, n, [1, -1]);
+        }
 
-		var res = 0;
-		for (var m = 0; m < M; m++) {
-			if (m % 2 == 0 || m % 3 == 0 || m % 5 == 0 || m % 7 == 0) {
-				res += dp[N][m];
-			}
-		}
-		return res;
-	}
+        var res = 0;
+        for (var m = 0; m < M; m++) {
+            if (m % 2 == 0 || m % 3 == 0 || m % 5 == 0 || m % 7 == 0) {
+                res += dp[N][m];
+            }
+        }
+        return res;
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var N = parseInt(lines[0]);
-		for (var i = 0; i < N; i++) {
-			probs.push(lines[i + 1]);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var N = parseInt(lines[0]);
+        for (var i = 0; i < N; i++) {
+            probs.push(lines[i + 1]);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			output += solve(probs[i]).toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i]).toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>Ugly Numbers</h3>
-	<em>Google Code Jam Round 1C 2008 B: </em>
-	<a href="https://code.google.com/codejam/contest/32015/dashboard#s=p1&a=1">Problem Statement</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Ugly Numbers</h3>
+    <em>Google Code Jam Round 1C 2008 B: </em>
+    <a href="https://code.google.com/codejam/contest/32015/dashboard#s=p1&a=1">Problem Statement</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 100
 0
 1
@@ -202,10 +202,10 @@
 9433879877471
 9655492462320
 9929263750831
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

@@ -1,136 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Bad Horse</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function Graph(V) {
-		this._V = V;
-		this._adj = new Array(V);
-		for (var i = 0; i < V; i++) {
-			this._adj[i] = [];
-		}
-	}
-	Graph.prototype.V = function () {
-		return this._V;
-	}
-	Graph.prototype.addEdge = function (u, v) {
-		this._adj[u].push(v);
-		this._adj[v].push(u);
-	}
-	Graph.prototype.adjacent = function (u) {
-		return this._adj[u];
-	}
+    <title>Bad Horse</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function Graph(V) {
+        this._V = V;
+        this._adj = new Array(V);
+        for (var i = 0; i < V; i++) {
+            this._adj[i] = [];
+        }
+    }
+    Graph.prototype.V = function () {
+        return this._V;
+    }
+    Graph.prototype.addEdge = function (u, v) {
+        this._adj[u].push(v);
+        this._adj[v].push(u);
+    }
+    Graph.prototype.adjacent = function (u) {
+        return this._adj[u];
+    }
 
-	function colorize(graph) {
-		var V = graph.V();
-		var color = new Array(V);
+    function colorize(graph) {
+        var V = graph.V();
+        var color = new Array(V);
 
-		var seen = new Array(V);
-		for (var i = 0; i < V; i++) {
-			seen[i] = false;
-		}
+        var seen = new Array(V);
+        for (var i = 0; i < V; i++) {
+            seen[i] = false;
+        }
 
-		function dfs(u) {
-			seen[u] = true;
-			var adj = graph.adjacent(u);
-			for (var j = 0; j < adj.length; j++) {
-				var v = adj[j];
-				if (seen[v]) {
-					if (color[v] == color[u]) return false;
-				} else {
-					color[v] = !color[u];
-					if (!dfs(v)) return false;
-				}
-			}
-			return true;
-		}
+        function dfs(u) {
+            seen[u] = true;
+            var adj = graph.adjacent(u);
+            for (var j = 0; j < adj.length; j++) {
+                var v = adj[j];
+                if (seen[v]) {
+                    if (color[v] == color[u]) return false;
+                } else {
+                    color[v] = !color[u];
+                    if (!dfs(v)) return false;
+                }
+            }
+            return true;
+        }
 
-		for (i = 0; i < V; i++) {
-			if (!seen[i]) {
-				color[i] = true;
-				if (!dfs(i)) return false;
-			}
-		}
-		return true;
-	}
+        for (i = 0; i < V; i++) {
+            if (!seen[i]) {
+                color[i] = true;
+                if (!dfs(i)) return false;
+            }
+        }
+        return true;
+    }
 
-	function buildGraph(pairs) {
-		var V = 0;
-		var map = {};
+    function buildGraph(pairs) {
+        var V = 0;
+        var map = {};
 
-		function addName(name) {
-			if (!(name in map)) {
-				map[name] = V++;
-			}
-		}
+        function addName(name) {
+            if (!(name in map)) {
+                map[name] = V++;
+            }
+        }
 
-		for (var i = 0; i < pairs.length; i++) {
-			var pair = pairs[i];
-			addName(pair[0]);
-			addName(pair[1]);
-		}
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            addName(pair[0]);
+            addName(pair[1]);
+        }
 
-		var graph = new Graph(V);
-		for (i = 0; i < pairs.length; i++) {
-			pair = pairs[i];
-			graph.addEdge(map[pair[0]], map[pair[1]]);
-		}
+        var graph = new Graph(V);
+        for (i = 0; i < pairs.length; i++) {
+            pair = pairs[i];
+            graph.addEdge(map[pair[0]], map[pair[1]]);
+        }
 
-		return graph;
-	}
+        return graph;
+    }
 
-	function solve(pairs) {
-		return colorize(buildGraph(pairs));
-	}
+    function solve(pairs) {
+        return colorize(buildGraph(pairs));
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var N = parseInt(lines[0]);
-		for (var i = 0, lineNo = 1; i < N; i++) {
-			var M = parseInt(lines[lineNo++]);
-			var pairs = []
-			for (var j = 0; j < M; j++) {
-				var pair = lines[lineNo++].split(" ");
-				pairs.push(pair);
-			}
-			probs.push(pairs);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var N = parseInt(lines[0]);
+        for (var i = 0, lineNo = 1; i < N; i++) {
+            var M = parseInt(lines[lineNo++]);
+            var pairs = []
+            for (var j = 0; j < M; j++) {
+                var pair = lines[lineNo++].split(" ");
+                pairs.push(pair);
+            }
+            probs.push(pairs);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			if (solve(probs[i])) {
-				output += "Yes\n";
-			} else { 
-				output += "No\n";
-			}
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            if (solve(probs[i])) {
+                output += "Yes\n";
+            } else { 
+                output += "No\n";
+            }
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>
 </head>
 <body>
-	<h3>Bad Horse</h3>
-	<em>Google Code Jam Practice Round China New Grad Test 2014 A: </em>
-	<a href="https://code.google.com/codejam/contest/2933486/dashboard">Problem Statement</a>
-	<p>Build an undirected graph with vertices corresponding to names. An edge from u to v means we don't want u and v in the same group. Reduce to a graph coloring problem: is it possible to paint every vertice in either red or black so that every edge connects two vertices of different colors? Try coloring with DFS. If DFS ever finds an edge with two vertices of the same color, we know there is a cycle with an odd number of vertices, and we deduce that it is impossible to color such graph.</p>
-	<p>The left textarea is prefilled with small input 1.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Bad Horse</h3>
+    <em>Google Code Jam Practice Round China New Grad Test 2014 A: </em>
+    <a href="https://code.google.com/codejam/contest/2933486/dashboard">Problem Statement</a>
+    <p>Build an undirected graph with vertices corresponding to names. An edge from u to v means we don't want u and v in the same group. Reduce to a graph coloring problem: is it possible to paint every vertice in either red or black so that every edge connects two vertices of different colors? Try coloring with DFS. If DFS ever finds an edge with two vertices of the same color, we know there is a cycle with an odd number of vertices, and we deduce that it is impossible to color such graph.</p>
+    <p>The left textarea is prefilled with small input 1.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 100
 8
 Dead_Bowie Nyssa_Raatko
@@ -1130,10 +1130,10 @@ New_Wave Trinity
 New_Wave Abominatrix
 Harley_Quinn Trinity
 Lady_Vic Abominatrix
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

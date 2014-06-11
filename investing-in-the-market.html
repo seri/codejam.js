@@ -1,85 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Investing in the Market</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
+    <title>Investing in the Market</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
 <script type="text/javascript">
-	function Solution(B, S, profit) {
-		this.B = B;
-		this.S = S;
-		this.profit = profit;
-	}
+    function Solution(B, S, profit) {
+        this.B = B;
+        this.S = S;
+        this.profit = profit;
+    }
 
-	function solve(M, prices) {
-		var res = new Solution(0, 0, 0);
-		for (var B = 0; B <= 10; B++) {
-			for (var S = B + 1; S <= 11; S++) {	
-			var profit = Math.floor(M / prices[B]) * (prices[S] - prices[B]);
-				if ((profit > res.profit) || 
-					(profit == res.profit && prices[B] < prices[res.B])) {
-					res = new Solution(B, S, profit);
-				}
-			}
-		}
-		return res.profit > 0 ? new Solution(res.B + 1, res.S + 1, res.profit) : null;
-	}
+    function solve(M, prices) {
+        var res = new Solution(0, 0, 0);
+        for (var B = 0; B <= 10; B++) {
+            for (var S = B + 1; S <= 11; S++) { 
+            var profit = Math.floor(M / prices[B]) * (prices[S] - prices[B]);
+                if ((profit > res.profit) || 
+                    (profit == res.profit && prices[B] < prices[res.B])) {
+                    res = new Solution(B, S, profit);
+                }
+            }
+        }
+        return res.profit > 0 ? new Solution(res.B + 1, res.S + 1, res.profit) : null;
+    }
 
-	function Problem() {
-		this.M = 0;
-		this.prices = [];
-	}
+    function Problem() {
+        this.M = 0;
+        this.prices = [];
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var N = parseInt(lines[0]);
-		for (var i = 0; i < N; i++) {
-			var prob = new Problem();
-			prob.M = parseInt(lines[1 + 2*i]);
-			var a = lines[2 + 2*i].split(" ");
-			prob.prices = new Array(12);
-			for (var j = 0; j < 12; j++) {
-				prob.prices[j] = parseInt(a[j]);
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var N = parseInt(lines[0]);
+        for (var i = 0; i < N; i++) {
+            var prob = new Problem();
+            prob.M = parseInt(lines[1 + 2*i]);
+            var a = lines[2 + 2*i].split(" ");
+            prob.prices = new Array(12);
+            for (var j = 0; j < 12; j++) {
+                prob.prices[j] = parseInt(a[j]);
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			var x = solve(probs[i].M, probs[i].prices);
-			if (x === null) {
-				output += "IMPOSSIBLE";
-			} else {
-				output += x.B.toString() + " ";
-				output += x.S.toString() + " ";
-				output += x.profit.toString();
-			}
-			output += "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            var x = solve(probs[i].M, probs[i].prices);
+            if (x === null) {
+                output += "IMPOSSIBLE";
+            } else {
+                output += x.B.toString() + " ";
+                output += x.S.toString() + " ";
+                output += x.profit.toString();
+            }
+            output += "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>Investing in the Market</h3>
-	<em>Google Code Jam Qualification Round Africa and Arabia 2011 B: </em>
-	<a href="https://code.google.com/codejam/contest/837485/dashboard#s=p1">Problem Statement</a>
-	<p>The left textarea is prefilled with large input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Investing in the Market</h3>
+    <em>Google Code Jam Qualification Round Africa and Arabia 2011 B: </em>
+    <a href="https://code.google.com/codejam/contest/837485/dashboard#s=p1">Problem Statement</a>
+    <p>The left textarea is prefilled with large input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 200
 100
 1 2 3 4 5 6 7 8 9 10 11 12
@@ -481,10 +481,10 @@
 207 162 41 100 187 229 121 15 19 232 241 143
 139
 175 136 86 111 2 137 95 57 132 23 47 68
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

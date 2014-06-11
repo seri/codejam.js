@@ -1,102 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Full Binary Tree</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function Graph(V) {
-		this._V = V;
-		this._adj = new Array(V);
-		for (var i = 0; i < V; i++) {
-			this._adj[i] = [];
-		}
-	}
-	Graph.prototype.V = function () {
-		return this._V;
-	}
-	Graph.prototype.addEdge = function (u, v) {
-		this._adj[u].push(v);
-		this._adj[v].push(u);
-	}
-	Graph.prototype.adjacent = function (u) {
-		return this._adj[u];
-	}
+    <title>Full Binary Tree</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function Graph(V) {
+        this._V = V;
+        this._adj = new Array(V);
+        for (var i = 0; i < V; i++) {
+            this._adj[i] = [];
+        }
+    }
+    Graph.prototype.V = function () {
+        return this._V;
+    }
+    Graph.prototype.addEdge = function (u, v) {
+        this._adj[u].push(v);
+        this._adj[v].push(u);
+    }
+    Graph.prototype.adjacent = function (u) {
+        return this._adj[u];
+    }
 
-	function maxTwo(pair, x) {
-		if (x > pair[0]) {
-			pair[0] = x;
-			pair.sort();
-		}
-	}
+    function maxTwo(pair, x) {
+        if (x > pair[0]) {
+            pair[0] = x;
+            pair.sort();
+        }
+    }
 
-	function maxSize(g, u, parent) {
-		var adj = g.adjacent(u);
-		var degree = adj.length;
+    function maxSize(g, u, parent) {
+        var adj = g.adjacent(u);
+        var degree = adj.length;
 
-		if ((parent == -1 && degree == 1) || 
-			(parent >= 0 && degree <= 2)) {
-			return 1;
-		}
-			
-		var pair = [0, 0];
-		for (var i = 0; i < degree; i++) {
-			var v = adj[i]; 
-			if (v != parent) {
-				maxTwo(pair, maxSize(g, v, u));
-			}
-		}
-		return 1 + pair[0] + pair[1];
-	}
+        if ((parent == -1 && degree == 1) || 
+            (parent >= 0 && degree <= 2)) {
+            return 1;
+        }
+            
+        var pair = [0, 0];
+        for (var i = 0; i < degree; i++) {
+            var v = adj[i]; 
+            if (v != parent) {
+                maxTwo(pair, maxSize(g, v, u));
+            }
+        }
+        return 1 + pair[0] + pair[1];
+    }
 
-	function solve(g) {
-		var res = 0;
-		for (var root = 0; root < g.V(); root++) {
-			res = Math.max(res, maxSize(g, root, -1));
-		}
-		return g.V() - res;
-	}
+    function solve(g) {
+        var res = 0;
+        for (var root = 0; root < g.V(); root++) {
+            res = Math.max(res, maxSize(g, root, -1));
+        }
+        return g.V() - res;
+    }
 
-	function parse(input) {
-		var graphs = [];
-		var lines = input.split(/\n/);
-		var T = parseInt(lines[0]);
-		for (var i = 0, j = 1; i < T; i++) {
-			var graph = new Graph(parseInt(lines[j++]));
-			for (var k = 0; k < graph.V() - 1; k++) {
-				var parts = lines[j++].split(" ");
-				graph.addEdge(parseInt(parts[0]) - 1, parseInt(parts[1]) - 1);
-			}
-			graphs.push(graph);
-		}
-		return graphs;
-	}
+    function parse(input) {
+        var graphs = [];
+        var lines = input.split(/\n/);
+        var T = parseInt(lines[0]);
+        for (var i = 0, j = 1; i < T; i++) {
+            var graph = new Graph(parseInt(lines[j++]));
+            for (var k = 0; k < graph.V() - 1; k++) {
+                var parts = lines[j++].split(" ");
+                graph.addEdge(parseInt(parts[0]) - 1, parseInt(parts[1]) - 1);
+            }
+            graphs.push(graph);
+        }
+        return graphs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			output += solve(probs[i]).toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i]).toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>Full Binary Tree</h3>
-	<em>Google Code Jam Round 1A 2014 B: </em>
-	<a href="https://code.google.com/codejam/contest/2984486/dashboard#s=p1">Problem Statement</a> | <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=a&a=1">Solution</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Full Binary Tree</h3>
+    <em>Google Code Jam Round 1A 2014 B: </em>
+    <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=p1">Problem Statement</a> | <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=a&a=1">Solution</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 100
 15
 1 2
@@ -1499,10 +1499,10 @@
 11 15
 2
 1 2
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

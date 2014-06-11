@@ -1,93 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Store Credit</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function Proxy(value, index) {
-		this.value = value;
-		this.index = index;
-	}
+    <title>Store Credit</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function Proxy(value, index) {
+        this.value = value;
+        this.index = index;
+    }
 
-	function convert(items) {
-		var proxies = [];
-		for (var i = 0; i < items.length; i++) {
-			proxies.push(new Proxy(items[i], i + 1));
-		}
-		return proxies;
-	}
+    function convert(items) {
+        var proxies = [];
+        for (var i = 0; i < items.length; i++) {
+            proxies.push(new Proxy(items[i], i + 1));
+        }
+        return proxies;
+    }
 
-	function binSearch(proxies, value, lo, hi) {
-		if (lo > hi) return -1;
-		if (value < proxies[lo].value) return -1;
-		if (value > proxies[hi].value) return -1;
-		var mid = lo + Math.floor((hi - lo)/2);
-		if (value == proxies[mid].value) return mid;
-		if (value > proxies[mid].value) return binSearch(proxies, value, mid + 1, hi);
-		return binSearch(proxies, value, lo, mid - 1);
-	}
+    function binSearch(proxies, value, lo, hi) {
+        if (lo > hi) return -1;
+        if (value < proxies[lo].value) return -1;
+        if (value > proxies[hi].value) return -1;
+        var mid = lo + Math.floor((hi - lo)/2);
+        if (value == proxies[mid].value) return mid;
+        if (value > proxies[mid].value) return binSearch(proxies, value, mid + 1, hi);
+        return binSearch(proxies, value, lo, mid - 1);
+    }
 
-	function solve(credit, items) {
-		var proxies = convert(items);
-		proxies.sort(function(x, y) {
-			return x.value - y.value;
-		});
-		for (var i = 0, n = proxies.length; i < n; i++) {
-			var j = binSearch(proxies, credit - proxies[i].value, i + 1, n - 1);
-			if (j > 0) return [proxies[i].index, proxies[j].index];
-		}
-		return [0, 0];
-	}
+    function solve(credit, items) {
+        var proxies = convert(items);
+        proxies.sort(function(x, y) {
+            return x.value - y.value;
+        });
+        for (var i = 0, n = proxies.length; i < n; i++) {
+            var j = binSearch(proxies, credit - proxies[i].value, i + 1, n - 1);
+            if (j > 0) return [proxies[i].index, proxies[j].index];
+        }
+        return [0, 0];
+    }
 
-	function Problem() {
-		this.credit = 0;
-		this.items = [];
-	}
+    function Problem() {
+        this.credit = 0;
+        this.items = [];
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\s/);
-		var nCase = parseInt(lines[0]);
-		for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
-			var prob = new Problem();
-			prob.credit = parseInt(lines[i++]); 
-			var n = parseInt(lines[i++]); 
-			prob.items = new Array(n);
-			for (var j = 0; j < n; j++) {
-				prob.items[j] = parseInt(lines[i++]);
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\s/);
+        var nCase = parseInt(lines[0]);
+        for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
+            var prob = new Problem();
+            prob.credit = parseInt(lines[i++]); 
+            var n = parseInt(lines[i++]); 
+            prob.items = new Array(n);
+            for (var j = 0; j < n; j++) {
+                prob.items[j] = parseInt(lines[i++]);
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "", i, res;
-		for (i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			res = solve(probs[i].credit, probs[i].items).sort();
-			output += res[0].toString() + " " + res[1].toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "", i, res;
+        for (i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            res = solve(probs[i].credit, probs[i].items).sort();
+            output += res[0].toString() + " " + res[1].toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>Store Credit</h3>
-	<em>Google Code Jam Qualification Round Africa 2010 A: </em>
-	<a href="https://code.google.com/codejam/contest/dashboard?c=351101#s=p0">Problem Statement</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>Store Credit</h3>
+    <em>Google Code Jam Qualification Round Africa 2010 A: </em>
+    <a href="https://code.google.com/codejam/contest/dashboard?c=351101#s=p0">Problem Statement</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 10
 100
 3
@@ -119,10 +119,10 @@
 295
 17
 678 227 764 37 956 982 118 212 177 597 519 968 866 121 771 343 561
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

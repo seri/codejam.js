@@ -1,101 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>File Fix-it</title>
-	<style type="text/css">
-	#input { float: left;  }
-	#submit { float: left; }
-	#output { float: left; }
-	</style>
-	<script type="text/javascript">
-	function Node(dir) {
-		this.dir = dir;
-		this.children = {};
-	}
-	Node.prototype.add = function(dirs, k) {
-		if (k == dirs.length) {
-			return 0;
-		}
-		var dir = dirs[k];
-		if (dir in this.children) {
-			return this.children[dir].add(dirs, k + 1);
-		} else {
-			var child = new Node(dir);
-			this.children[dir] = child;
-			return 1 + child.add(dirs, k + 1);
-		}
-	}
+    <title>File Fix-it</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    </style>
+    <script type="text/javascript">
+    function Node(dir) {
+        this.dir = dir;
+        this.children = {};
+    }
+    Node.prototype.add = function(dirs, k) {
+        if (k == dirs.length) {
+            return 0;
+        }
+        var dir = dirs[k];
+        if (dir in this.children) {
+            return this.children[dir].add(dirs, k + 1);
+        } else {
+            var child = new Node(dir);
+            this.children[dir] = child;
+            return 1 + child.add(dirs, k + 1);
+        }
+    }
 
-	function Trie() {
-		this._root = new Node(""); 
-		this._size = 0;
-	}
-	Trie.prototype.size = function() {
-		return this._size;
-	}
-	Trie.prototype.add = function(dirs) {
-		this._size += this._root.add(dirs, 1);
-	}
+    function Trie() {
+        this._root = new Node(""); 
+        this._size = 0;
+    }
+    Trie.prototype.size = function() {
+        return this._size;
+    }
+    Trie.prototype.add = function(dirs) {
+        this._size += this._root.add(dirs, 1);
+    }
 
-	function solve(existed, toAdd) {
-		var trie = new Trie();
-		existed.forEach(function(path) {
-			trie.add(path.split("/"));
-		});
-		var size = trie.size();
-		toAdd.forEach(function(path) {
-			trie.add(path.split("/"));
-		});
-		return trie.size() - size;
-	}
-	
-	function Problem() {
-		this.existed = [];
-		this.toAdd = [];
-	}
+    function solve(existed, toAdd) {
+        var trie = new Trie();
+        existed.forEach(function(path) {
+            trie.add(path.split("/"));
+        });
+        var size = trie.size();
+        toAdd.forEach(function(path) {
+            trie.add(path.split("/"));
+        });
+        return trie.size() - size;
+    }
+    
+    function Problem() {
+        this.existed = [];
+        this.toAdd = [];
+    }
 
-	function parse(input) {
-		var probs = [];
-		var lines = input.split(/\n/);
-		var T = parseInt(lines[0]);
-		for (var iCase = 0, i = 1; iCase < T; iCase++) {
-			var prob = new Problem();
-			var a = lines[i++].split(" ");
-			prob.existed = new Array(parseInt(a[0]));
-			prob.toAdd = new Array(parseInt(a[1]));
-			for (var j = 0; j < prob.existed.length; j++) {
-				prob.existed[j] = lines[i++]; 
-			}
-			for (j = 0; j < prob.toAdd.length; j++) {
-				prob.toAdd[j] = lines[i++]; 
-			}
-			probs.push(prob);
-		}
-		return probs;
-	}
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var T = parseInt(lines[0]);
+        for (var iCase = 0, i = 1; iCase < T; iCase++) {
+            var prob = new Problem();
+            var a = lines[i++].split(" ");
+            prob.existed = new Array(parseInt(a[0]));
+            prob.toAdd = new Array(parseInt(a[1]));
+            for (var j = 0; j < prob.existed.length; j++) {
+                prob.existed[j] = lines[i++]; 
+            }
+            for (j = 0; j < prob.toAdd.length; j++) {
+                prob.toAdd[j] = lines[i++]; 
+            }
+            probs.push(prob);
+        }
+        return probs;
+    }
 
-	function process(probs) {
-		var output = "";
-		for (var i = 0; i < probs.length; i++) {
-			output += "Case #" + (i + 1).toString() + ": ";
-			output += solve(probs[i].existed, probs[i].toAdd).toString() + "\n";
-		}
-		return output;
-	}
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i].existed, probs[i].toAdd).toString() + "\n";
+        }
+        return output;
+    }
 
-	function main() {
-		var input = document.getElementById("input");
-		var output = document.getElementById("output");
-		output.value = process(parse(input.value));
-	}
-	</script>	
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        output.value = process(parse(input.value));
+    }
+    </script>   
 </head>
 <body>
-	<h3>File Fix-it</h3>
-	<em>Google Code Jam Round 1B 2010 A: </em>
-	<a href="https://code.google.com/codejam/contest/635101/dashboard#s=p0">Problem Statement</a>
-	<p>The left textarea is prefilled with small input.</p>
-	<textarea id="input" type="text" cols="50" rows="20" >
+    <h3>File Fix-it</h3>
+    <em>Google Code Jam Round 1B 2010 A: </em>
+    <a href="https://code.google.com/codejam/contest/635101/dashboard#s=p0">Problem Statement</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <textarea id="input" type="text" cols="50" rows="20" >
 100
 0 2
 /home/gcj/finals
@@ -1511,10 +1511,10 @@
 /ycu/r
 /h
 /y
-	</textarea>
-	<button id="submit" onclick="main()">Run</button>
-	<textarea id="output" type="text" cols="50" rows="20" >
+    </textarea>
+    <button id="submit" onclick="main()">Run</button>
+    <textarea id="output" type="text" cols="50" rows="20" >
 Output will be displayed here
-	</textarea>
+    </textarea>
 </body>
 </html>

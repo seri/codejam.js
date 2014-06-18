@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Probname</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    .clear { clear: left; }
+    </style>
+    <script type="text/javascript">
+    function solve(prob) {
+        return 0;
+    }
+
+    function Problem() {
+        
+    }
+
+    function parse(input) {
+        var probs = [];
+        var lines = input.split(/\n/);
+        var nCase = parseInt(lines[0]);
+        for (var iCase = 0, i = 1; iCase < nCase; iCase++) {
+            var prob = new Problem();
+            probs.push(prob);
+        }
+        return probs;
+    }
+
+    function process(probs) {
+        var output = "";
+        for (var i = 0; i < probs.length; i++) {
+            output += "Case #" + (i + 1).toString() + ": ";
+            output += solve(probs[i]) + "\n";
+        }
+        return output;
+    }
+
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        var before = Date.now();
+        output.value = process(parse(input.value));
+        document.getElementById("timer").innerText = (Date.now() - before) + "ms";
+    }
+    </script>   
+</head>
+<body>
+    <h3>Probname</h3>
+    <em>Google Code Jam: </em>
+    <a href="https://code.google.com/codejam/contest/">Problem Statement</a>
+    <p>The left textarea is prefilled with small input.</p>
+    <div>
+        <textarea id="input" type="text" cols="50" rows="20">
+Input should be copied into here
+        </textarea>
+        <button id="submit" onclick="main()">Run</button>
+        <textarea id="output" type="text" cols="50" rows="20">
+Output will be displayed here
+        </textarea>
+        <div class="clear"></div>
+    </div>
+    <p>Time taken: <span id="timer"><span></p>
+</body>
+</html>

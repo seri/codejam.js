@@ -64,13 +64,9 @@
  
     function solve(bases) {
         for (var n = 2; n > 0; n++) {
-            var ok = true;
-            for (var i = 0; i < bases.length && ok; i++) {
-                ok = (ok && isHappy(n, bases[i]));
-            }
-            if (ok) {
-                return n;
-            }
+            if (bases.every(function(base) {
+                return isHappy(n, base);
+            })) return n;
         }
         return 0;
     }
@@ -80,22 +76,17 @@
         var lines = input.split(/\n/);
         var N = parseInt(lines[0]);
         for (var i = 0; i < N; i++) {
-            var bases = [];
-            lines[i + 1].split(" ").forEach(function(token) {
-                bases.push(parseInt(token));
-            });
-            probs.push(bases);
+            probs.push(lines[i + 1].split(" ").map(function(token) {
+                return parseInt(token);
+            }));
         }
         return probs;
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(probs[i]).toString() + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x);
+        }).join("\n");
     }
 
     function main() {

@@ -9,21 +9,23 @@
     </style>
     <script type="text/javascript">
     function Graph(V) {
-        this._V = V;
-        this._adj = new Array(V);
+        var adj = new Array(V);
         for (var i = 0; i < V; i++) {
-            this._adj[i] = [];
+            adj[i] = [];
         }
-    }
-    Graph.prototype.V = function () {
-        return this._V;
-    }
-    Graph.prototype.addEdge = function (u, v) {
-        this._adj[u].push(v);
-        this._adj[v].push(u);
-    }
-    Graph.prototype.adjacent = function (u) {
-        return this._adj[u];
+
+        this.V = function () {
+            return V;
+        }
+
+        this.addEdge = function (u, v) {
+            adj[u].push(v);
+            adj[v].push(u);
+        }
+
+        this.adjacent = function (u) {
+            return adj[u];
+        }
     }
 
     function maxTwo(pair, x) {
@@ -76,12 +78,9 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(probs[i]).toString() + "\n";
-        }
-        return output;
+         return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x);
+        }).join("\n");
     }
 
     function main() {
@@ -94,7 +93,7 @@
 <body>
     <h3>Full Binary Tree</h3>
     <em>Google Code Jam Round 1A 2014 B: </em>
-    <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=p1">Problem Statement</a> | <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=a&a=1">Solution</a>
+    <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=p1">Problem Statement</a>
     <p>The left textarea is prefilled with small input.</p>
     <textarea id="input" type="text" cols="50" rows="20" >
 100

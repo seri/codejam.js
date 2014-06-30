@@ -11,19 +11,19 @@
     function solve(engines, queries) {
         var res = 0;
         var seen = {};
-        var S = engines.length, Q = queries.length;
-        for (var i = 0, j = 0; i < Q; i++) {
-            var query = queries[i];
+        var S = engines.length;
+        var i = 0;
+        queries.forEach(function(query) {
             if (!(query in seen)) {
-                if (j == S - 1) {
+                if (i == S - 1) {
                     seen = {};
-                    j = 0;
+                    i = 0;
                     res++;
                 }
                 seen[query] = true;
-                j++;
+                i++;
             }
-        }
+        });
         return res;
     }
 
@@ -52,12 +52,9 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(probs[i].engines, probs[i].queries).toString() + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x.engines, x.queries);
+        }).join("\n");
     }
 
     function main() {

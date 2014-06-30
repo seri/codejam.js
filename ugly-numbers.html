@@ -8,6 +8,8 @@
     #output { float: left; }
     </style>
     <script type="text/javascript">
+    // Read contest analysis for explanation.
+
     // Dynamic Programming formula:
     // dp[n][m] = ways to get to m (mod 210) using only the first n digits
 
@@ -70,22 +72,13 @@
     }
 
     function parse(input) {
-        var probs = [];
-        var lines = input.split(/\n/);
-        var N = parseInt(lines[0]);
-        for (var i = 0; i < N; i++) {
-            probs.push(lines[i + 1]);
-        }
-        return probs;
+        return input.trim().split(/\n/).splice(1);
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(probs[i]).toString() + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x);
+        }).join("\n");
     }
 
     function main() {
@@ -98,7 +91,7 @@
 <body>
     <h3>Ugly Numbers</h3>
     <em>Google Code Jam Round 1C 2008 B: </em>
-    <a href="https://code.google.com/codejam/contest/32015/dashboard#s=p1&a=1">Problem Statement</a>
+    <a href="https://code.google.com/codejam/contest/32015/dashboard#s=p1">Problem Statement</a>
     <p>The left textarea is prefilled with small input.</p>
     <textarea id="input" type="text" cols="50" rows="20" >
 100

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Equal Sums</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    .clear { clear: left; }
+    </style>
+    <script type="text/javascript">
+    // The following dynamic programming approach only works for small input.
+    // dp[S] is a subset (encoded as a bit mask) that sums up to S.
+
+    function newArray(N, value) {
+        var a = new Array(N);
+        for (var i = 0; i < N; i++) {
+            a[i] = value;
+        }
+        return a;
+    }
+
+    function subset(a, mask) {
+        var b = [];
+        a.forEach(function(x, i) {
+            if ((mask & (1 << i)) > 0) {
+                b.push(x);
+            }
+        });
+        return b;
+    }
+
+    function acceptResult(a, mask1, mask2) {
+        var common = mask1 & mask2;
+        mask1 ^= common; mask2 ^= common;
+        return [subset(a, mask1), subset(a, mask2)];
+    }
+
+    function solve(a) {
+        var N = a.length;
+        var maxS = a.reduce(function(x, y) { 
+            return x + y;
+        });
+        var dp = newArray(maxS + 1, -1); dp[0] = 0;
+        for (var n = 0; n < N; n++) {
+            for (var S = 0; S <= maxS - a[n]; S++) {
+                if (dp[S] != -1 && (dp[S] & (1 << n)) == 0) {
+                    var newS = S + a[n];
+                    var newMask = (dp[S] | (1 << n));
+                    if (dp[newS] == -1) {
+                        dp[newS] = newMask;
+                    } else {
+                        return acceptResult(a, dp[newS], newMask);
+                    }
+                }
+            }
+        }
+        return [];
+    }
+
+    function parse(input) {
+        return input.trim().split(/\n/).splice(1).map(function(line) {
+            return line.trim().split(" ").splice(1).map(function(token) {
+                return parseInt(token);
+            });
+        });
+    }
+
+    function process(probs) {
+        return probs.map(function(x, i) {
+            var y = solve(x);
+            y = (y.length != 2) ? "Impossible" : 
+                "\n" + y.map(function(a) {
+                    return a.join(" ")
+                }).join("\n");
+            return "Case #" + (i + 1) + ": " + y;
+        }).join("\n");
+    }
+
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        var before = Date.now();
+        output.value = process(parse(input.value));
+        document.getElementById("timer").innerText = (Date.now() - before) + "ms";
+    }
+    </script>   
+</head>
+<body>
+    <h3>Equal Sums</h3>
+    <em>Google Code Jam Round 1B 2012 C: </em>
+    <a href="https://code.google.com/codejam/contest/1836486/dashboard#s=p2">Problem Statement</a>
+    <p>Solution only applies to small input. The left textarea is prefilled with small input.</p>
+    <div>
+        <textarea id="input" type="text" cols="50" rows="20">
+2
+20 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+20 120 266 858 1243 1657 1771 2328 2490 2665 2894 3117 4210 4454 4943 5690 6170 7048 7125 9512 9600
+        </textarea>
+        <button id="submit" onclick="main()">Run</button>
+        <textarea id="output" type="text" cols="50" rows="20">
+Output will be displayed here
+        </textarea>
+        <div class="clear"></div>
+    </div>
+    <p>Time taken: <span id="timer"><span></p>
+</body>
+</html>

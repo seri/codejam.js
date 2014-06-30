@@ -8,22 +8,32 @@
     #output { float: left; }
     </style>
     <script type="text/javascript">
+    // Build an undirected graph with vertices corresponding to names. 
+    // An edge from u to v means we don't want u and v in the same group. 
+    // Reduce to a graph coloring problem: can we paint every vertice in 
+    // either red or black so that every edge connects two vertices of
+    // different colors? Try coloring with DFS. If DFS ever finds an edge with
+    // two vertices of the same color, we know there is a cycle with an odd 
+    // number of vertices, and we deduce that the graph cannot be colored.
+
     function Graph(V) {
-        this._V = V;
-        this._adj = new Array(V);
+        var adj = new Array(V);
         for (var i = 0; i < V; i++) {
-            this._adj[i] = [];
+            adj[i] = [];
         }
-    }
-    Graph.prototype.V = function () {
-        return this._V;
-    }
-    Graph.prototype.addEdge = function (u, v) {
-        this._adj[u].push(v);
-        this._adj[v].push(u);
-    }
-    Graph.prototype.adjacent = function (u) {
-        return this._adj[u];
+
+        this.V = function () {
+            return V;
+        }
+
+        this.addEdge = function (u, v) {
+            adj[u].push(v);
+            adj[v].push(u);
+        }
+
+        this.adjacent = function (u) {
+            return adj[u];
+        }
     }
 
     function colorize(graph) {
@@ -91,12 +101,12 @@
     function parse(input) {
         var probs = [];
         var lines = input.split(/\n/);
-        var N = parseInt(lines[0]);
-        for (var i = 0, lineNo = 1; i < N; i++) {
-            var M = parseInt(lines[lineNo++]);
-            var pairs = []
+        var T = parseInt(lines[0]);
+        for (var iLine = 0, i = 1; iLine < T; iLine++) {
+            var M = parseInt(lines[i++]);
+            var pairs = [];
             for (var j = 0; j < M; j++) {
-                var pair = lines[lineNo++].split(" ");
+                var pair = lines[i++].split(" ");
                 pairs.push(pair);
             }
             probs.push(pairs);
@@ -105,16 +115,10 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            if (solve(probs[i])) {
-                output += "Yes\n";
-            } else { 
-                output += "No\n";
-            }
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " +
+                (solve(x) ? "Yes" : "No");
+        }).join("\n");
     }
 
     function main() {
@@ -128,7 +132,6 @@
     <h3>Bad Horse</h3>
     <em>Google Code Jam Practice Round China New Grad Test 2014 A: </em>
     <a href="https://code.google.com/codejam/contest/2933486/dashboard">Problem Statement</a>
-    <p>Build an undirected graph with vertices corresponding to names. An edge from u to v means we don't want u and v in the same group. Reduce to a graph coloring problem: is it possible to paint every vertice in either red or black so that every edge connects two vertices of different colors? Try coloring with DFS. If DFS ever finds an edge with two vertices of the same color, we know there is a cycle with an odd number of vertices, and we deduce that it is impossible to color such graph.</p>
     <p>The left textarea is prefilled with small input 1.</p>
     <textarea id="input" type="text" cols="50" rows="20" >
 100

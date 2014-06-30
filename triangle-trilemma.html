@@ -20,37 +20,44 @@
     function Vector(A, B) {
         this.x = A.x - B.x;
         this.y = A.y - B.y;
-    }
-    Vector.prototype.size = function() {
-        return sqr(this.x) + sqr(this.y);
-    }
-    Vector.prototype.collinear = function(that) {
-        return this.x * that.y == this.y * that.x;
+        var self = this;
+
+        this.size = function() {
+            return sqr(self.x) + sqr(self.y);
+        }
+
+        this.collinear = function(that) {
+            return self.x * that.y == self.y * that.x;
+        }
     }
 
     function Triangle(A, B, C) {
         this.A = A;
         this.B = B;
         this.C = C;
-    }
-    Triangle.prototype.getVectors = function() {
-        return {
-            "AB": new Vector(this.A, this.B), 
-            "BC": new Vector(this.B, this.C), 
-            "CA": new Vector(this.C, this.A)
-        };
-    }
-    Triangle.prototype.collinear = function() {
-        var vs = this.getVectors();
-        return vs.AB.collinear(vs.BC);
-    }
-    Triangle.prototype.getSides = function() {
-        var vs = this.getVectors();
-        var sides = [vs.AB.size(), vs.BC.size(), vs.CA.size()];
-        sides.sort(function(p, q) {
-            return p - q;
-        });
-        return sides;
+        var self = this;
+
+        this.getVectors = function() {
+            return {
+                "AB": new Vector(self.A, self.B), 
+                "BC": new Vector(self.B, self.C), 
+                "CA": new Vector(self.C, self.A)
+            };
+        }
+
+        this.collinear = function() {
+            var vs = self.getVectors();
+            return vs.AB.collinear(vs.BC);
+        }
+
+        this.getSides = function() {
+            var vs = self.getVectors();
+            var sides = [vs.AB.size(), vs.BC.size(), vs.CA.size()];
+            sides.sort(function(p, q) {
+                return p - q;
+            });
+            return sides;
+        }
     }
 
     function solve(triangle) {
@@ -58,26 +65,12 @@
         if (a[0] == 0 || triangle.collinear()) {
             return "not a triangle";
         }
-
-        var res = "";
-
-        if (a[0] == a[1] || a[1] == a[2]) {
-            res += "isosceles ";
-        } else {
-            res += "scalene ";
-        }
-
+        var res = (a[0] == a[1]) || (a[1] == a[2]) ? "isosceles " : "scalene ";
         var x = a[0] + a[1] - a[2];
-        if (x == 0) {
-            res += "right ";
-        } else if (x > 0) {
-            res += "acute ";
-        } else {
-            res += "obtuse ";
-        }
-
-        res += "triangle";
-        return res;
+        if (x == 0)     res += "right";
+        else if (x > 0) res += "acute";
+                   else res += "obtuse";
+        return res + " triangle";
     }
 
     function parse(input) {
@@ -94,13 +87,10 @@
         return triangles;
     }
 
-    function process(triangles) {
-        var output = "";
-        for (var i = 0; i < triangles.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(triangles[i]) + "\n";
-        }
-        return output;
+    function process(probs) {
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x);
+        }).join("\n");
     }
 
     function main() {

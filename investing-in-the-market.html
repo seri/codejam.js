@@ -51,20 +51,11 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            var x = solve(probs[i].M, probs[i].prices);
-            if (x === null) {
-                output += "IMPOSSIBLE";
-            } else {
-                output += x.B.toString() + " ";
-                output += x.S.toString() + " ";
-                output += x.profit.toString();
-            }
-            output += "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            var y = solve(x.M, x.prices);
+            return "Case #" + (i + 1) + ": " +
+                (y === null ? "IMPOSSIBLE" : y.B + " " + y.S + " " + y.profit);
+        }).join("\n");        
     }
 
     function main() {

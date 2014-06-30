@@ -13,14 +13,6 @@
         this.index = index;
     }
 
-    function convert(items) {
-        var proxies = [];
-        for (var i = 0; i < items.length; i++) {
-            proxies.push(new Proxy(items[i], i + 1));
-        }
-        return proxies;
-    }
-
     function binSearch(proxies, value, lo, hi) {
         if (lo > hi) return -1;
         if (value < proxies[lo].value) return -1;
@@ -32,8 +24,9 @@
     }
 
     function solve(credit, items) {
-        var proxies = convert(items);
-        proxies.sort(function(x, y) {
+        var proxies = items.map(function(x, i) {
+            return new Proxy(x, i + 1);
+        }).sort(function(x, y) {
             return x.value - y.value;
         });
         for (var i = 0, n = proxies.length; i < n; i++) {
@@ -66,13 +59,10 @@
     }
 
     function process(probs) {
-        var output = "", i, res;
-        for (i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            res = solve(probs[i].credit, probs[i].items).sort();
-            output += res[0].toString() + " " + res[1].toString() + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + 
+                solve(x.credit, x.items).sort().join(" ");
+        }).join("\n");
     }
 
     function main() {

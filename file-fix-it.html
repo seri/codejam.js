@@ -11,30 +11,33 @@
     function Node(dir) {
         this.dir = dir;
         this.children = {};
-    }
-    Node.prototype.add = function(dirs, k) {
-        if (k == dirs.length) {
-            return 0;
-        }
-        var dir = dirs[k];
-        if (dir in this.children) {
-            return this.children[dir].add(dirs, k + 1);
-        } else {
-            var child = new Node(dir);
-            this.children[dir] = child;
-            return 1 + child.add(dirs, k + 1);
+    
+        this.add = function(dirs, k) {
+            if (k == dirs.length) {
+                return 0;
+            }
+            var dir = dirs[k];
+            if (dir in this.children) {
+                return this.children[dir].add(dirs, k + 1);
+            } else {
+                var child = new Node(dir);
+                this.children[dir] = child;
+                return 1 + child.add(dirs, k + 1);
+            }
         }
     }
 
     function Trie() {
-        this._root = new Node(""); 
-        this._size = 0;
-    }
-    Trie.prototype.size = function() {
-        return this._size;
-    }
-    Trie.prototype.add = function(dirs) {
-        this._size += this._root.add(dirs, 1);
+        var root = new Node(""); 
+        var N = 0;
+    
+        this.size = function() {
+            return N;
+        }
+    
+        this.add = function(dirs) {
+            N += root.add(dirs, 1);
+        }
     }
 
     function solve(existed, toAdd) {
@@ -75,12 +78,9 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            output += solve(probs[i].existed, probs[i].toAdd).toString() + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x.existed, x.toAdd);
+        }).join("\n");
     }
 
     function main() {
@@ -93,7 +93,7 @@
 <body>
     <h3>File Fix-it</h3>
     <em>Google Code Jam Round 1B 2010 A: </em>
-    <a href="https://code.google.com/codejam/contest/635101/dashboard#s=p0">Problem Statement</a>
+    <a href="https://code.google.com/codejam/contest/635101/dashboard">Problem Statement</a>
     <p>The left textarea is prefilled with small input.</p>
     <textarea id="input" type="text" cols="50" rows="20" >
 100

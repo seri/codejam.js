@@ -46,7 +46,7 @@
         a.sort(function(x, y) {
             return x - y;
         });
-        return a[Math.floor(a.length/2)];
+        return a[Math.floor(a.length / 2)];
     }
 
     function distance(x, a) {
@@ -90,18 +90,11 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            var solution = solve(probs[i]);
-            if (solution == -1) {
-                output += "Fegla Won"
-            } else {
-                output += solve(probs[i]);
-            }
-            output += "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            var y = solve(x);
+            return "Case #" + (i + 1) + ": " + 
+                (y == -1 ? "Fegla Won" : y);
+        }).join("\n");
     }
 
     function main() {
@@ -115,7 +108,7 @@
 </head>
 <body>
     <h3>The Repeater</h3>
-    <em>Google Code Jam Round 1B 2014: </em>
+    <em>Google Code Jam Round 1B 2014 A: </em>
     <a href="https://code.google.com/codejam/contest/2994486/dashboard">Problem Statement</a>
     <p>The left textarea is prefilled with large input.</p>
     <div>

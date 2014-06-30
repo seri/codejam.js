@@ -68,12 +68,10 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).tooutputing() + ": ";
-            output += solve(probs[i].number, probs[i].source, probs[i].target) + "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " +
+                solve(x.number, x.source, x.target);
+        }).join("\n");
     }
 
     function main() {

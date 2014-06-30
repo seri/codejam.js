@@ -17,62 +17,41 @@
         return res;
     }
 
-    function convert(flows) {
-        for (var i = 0; i < flows.length; i++) {
-            flows[i] = convertElectric(flows[i]);
-        }
-    }
-
     function xorAll(xs, ys) {
-        var res = new Array(xs.length);
-        for (var i = 0; i < xs.length; i++) {
-            res[i] = (xs[i] != ys[i]);
-        }
-        return res;
+        return xs.map(function(x, i) {
+            return x != ys[i];
+        });
     }
 
     function isEqual(xs, ys) {
-        for (var i = 0; i < xs.length; i++) {
-            if (xs[i] != ys[i]) {
-                return false;
-            }
-        }
-        return true;
+        return xs.length == ys.length && xs.every(function(x, i) {
+            return x == ys[i];
+        });
     }
 
     function check(code, outlets, devices) {
-        var flipped = new Array(outlets.length);
-        for (var i = 0; i < outlets.length; i++) {
-            flipped[i] = xorAll(code, outlets[i]);
-        }       
-        flipped.sort();
-        for (var i = 0; i < outlets.length; i++) {
-            if (!isEqual(flipped[i], devices[i])) {
-                return false;
-            }
-        }
-        return true;
+        return outlets.map(function(outlet) {
+            return xorAll(code, outlet);
+        }).sort().every(function(flipped, i) {
+            return isEqual(flipped, devices[i]);
+        });
     }
 
     function countCost(code) {
-        var res = 0;
-        for (var i = 0; i < code.length; i++) {
-            if (code[i]) {
-                res++;
-            }
-        }
-        return res;
+        return code.reduce(function(sum, x) {
+            return x ? (sum + 1) : sum;
+        }, 0);
     }
 
-    function solve(N, L, outlets, devices) {
-        convert(outlets); convert(devices); devices.sort();
-        var res = L + 1;
-        for (var i = 0; i < N; i++) {
-            var code = xorAll(outlets[i], devices[0]);
-            if (check(code, outlets, devices)) {
-                res = Math.min(res, countCost(code));
-            }
-        }
+    function solve(L, outlets, devices) {
+        outlets = outlets.map(convertElectric); 
+        devices = devices.map(convertElectric); 
+        devices.sort();
+        var res = outlets.reduce(function(min, outlet) {
+            var code = xorAll(outlet, devices[0]);
+            return check(code, outlets, devices) ? 
+                   Math.min(min, countCost(code)) : min;
+        }, L + 1);
         return res == L + 1 ? -1 : res;
     }
 
@@ -100,19 +79,11 @@
     }
 
     function process(probs) {
-        var output = "";
-        for (var i = 0; i < probs.length; i++) {
-            output += "Case #" + (i + 1).toString() + ": ";
-            var solution = solve(probs[i].N, probs[i].L, 
-                                 probs[i].outlets, probs[i].devices);
-            if (solution == -1) {
-                output += "NOT POSSIBLE";
-            } else {
-                output += solution.toString();
-            }
-            output += "\n";
-        }
-        return output;
+        return probs.map(function(x, i) {
+            var y = solve(x.L, x.outlets, x.devices);
+            return "Case #" + (i + 1) + ": " + 
+                (y == -1 ? "NOT POSSIBLE" : y);
+        }).join("\n");
     }
 
     function main() {
@@ -126,9 +97,9 @@
 </head>
 <body>
     <h3>Charging Chaos</h3>
-    <em>Google Code Jam Round 1A 2014: </em>
-    <a href="https://code.google.com/codejam/contest/2984486/dashboard#s=p0&a=0">Problem Statement</a>
-    <p>This will take a while as Javascript's bitwise operations only support 32-bit integers.</p>
+    <em>Google Code Jam Round 1A 2014 A: </em>
+    <a href="https://code.google.com/codejam/contest/2984486/dashboard">Problem Statement</a>
+    <p>As Javascript's bitwise operations only support 32-bit integers, we shall simply use an array of booleans for simplicity. So this will take a while.</p>
     <p>The left textarea is prefilled with large input.</p>
     <div>
     <textarea id="input" type="text" cols="50" rows="20" >

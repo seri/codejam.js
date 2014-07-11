@@ -22,4 +22,20 @@
             return x == ys[i];
         });
     }
-   
+
+    function new4DArray(x, y, z, t, value) {
+        var a = new Array(x);
+        for (var ix = 0; ix < x; ix++) {
+            a[ix] = new Array(y);
+            for (var iy = 0; iy < y; iy++) {
+                a[ix][iy] = new Array(z);
+                for (var iz = 0; iz < z; iz++) {
+                    a[ix][iy][iz] = new Array(t);
+                    for (var it = 0; it < t; it++) {
+                        a[ix][iy][iz][it] = value;
+                    }
+                }
+            }
+        }
+        return a;
+    }

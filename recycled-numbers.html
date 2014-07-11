@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recycled Numbers</title>
+    <style type="text/css">
+    #input { float: left;  }
+    #submit { float: left; }
+    #output { float: left; }
+    .clear { clear: left; }
+    </style>
+    <script type="text/javascript">
+    function maxTen(n) {
+        var ten = 10;
+        while (ten <= n) {
+            ten *= 10;
+        }
+        return ten;
+    }
+
+    function recycle(n, pow, ten) {
+        var back = n % pow;
+        var front = Math.floor(n / pow);
+        return back * Math.floor(ten / pow) + front;        
+    }
+
+    function familySize(n, A, B, ten) {
+        var size = 1;
+        for (var pow = 10; pow < ten; pow *= 10) {
+            var x = recycle(n, pow, ten);
+            if (x < A) continue;
+            if (x < n) return 1;
+            if (x == n) break;
+            if (x <= B) size++;
+        }
+        return size;
+    }
+
+    function solve(A, B) {
+        var res = 0, ten = maxTen(A);
+        for (var n = A; n <= B; n++) {
+            var size = familySize(n, A, B, ten);
+            res += size * (size - 1) / 2;
+        }
+        return res;
+    }
+
+    function Problem(A, B) {
+        this.A = A;
+        this.B = B;
+    }
+
+    function parse(input) {
+        return input.trim().split(/\n/).splice(1).map(function(line) {
+            var a = line.trim().split(/\s/);
+            return new Problem(parseInt(a[0]), parseInt(a[1]));
+        });
+    }
+
+    function process(probs) {
+        return probs.map(function(x, i) {
+            return "Case #" + (i + 1) + ": " + solve(x.A, x.B);
+        }).join("\n");
+    }
+
+    function main() {
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        var before = Date.now();
+        output.value = process(parse(input.value));
+        document.getElementById("timer").innerText = (Date.now() - before) + "ms";
+    }
+    </script>   
+</head>
+<body>
+    <h3>Recycled Numbers</h3>
+    <em>Google Code Jam: </em>
+    <a href="https://code.google.com/codejam/contest/1460488/dashboard#s=p2">Problem Statement</a>
+    <p>The left textarea is prefilled with large input.</p>
+    <div>
+        <textarea id="input" type="text" cols="50" rows="20">
+50
+1069514 1946556
+69157 74401
+484 954
+159887 195662
+16611 61695
+1069712 1980470
+1010 1294
+1053415 1938602
+100 101
+1795938 1958424
+1076393 1101254
+509321 987048
+1436468 1883090
+382401 594427
+1324 3755
+1065374 1950079
+283 788
+1960849 1960849
+384 750
+1007197 1985768
+44297 50998
+1235312 1882974
+100000 100000
+1079742 1491500
+21 31
+1030507 1957671
+1387415 1765422
+40011 49038
+1029932 1984145
+34 70
+51821 95964
+651767 651767
+1072779 1959216
+100000 999999
+1093515 1975348
+1219153 1375716
+1043299 1944882
+354850 915014
+6 7
+5029 5426
+1068734 1946365
+1042469 1993677
+1059237 1972939
+1000 9999
+568578 916014
+8013 8403
+1033044 1990734
+1036187 1995973
+458516 555845
+1067827 1917733
+        </textarea>
+        <button id="submit" onclick="main()">Run</button>
+        <textarea id="output" type="text" cols="50" rows="20">
+Output will be displayed here
+        </textarea>
+        <div class="clear"></div>
+    </div>
+    <p>Time taken: <span id="timer"><span></p>
+</body>
+</html>
